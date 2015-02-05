@@ -13,14 +13,17 @@ Status
 ----
 
 **NON-FUNCTIONAL**
+**ALPHA**
 
 This is a non-functional automated icehouse all-in-one installer.
 
 TODO
 ----
-- Fix neutron configs (several of them are still grizzly configs)
+- Fix neutron configs (several of them are still grizzly configs) (!important)
 - Fix nova.conf.nova-network (still completely grizzly)
-- Refactor allinone_nova_setup_nova_network() # left as grizzly
+- Fix `controller_neutron_setup()` and `network_neutron_setup()`
+- Fix `allinone_neutron_setup()` for GRE (vlan works right now)
+- Refactor `allinone_nova_setup_nova_network()` # left as grizzly
 - Add kvm/qemu selection for the compute node
 - Add vlan/vxlan/gre/flag network selection in neutron
 - Verify sysctl additions

@@ -17,11 +17,6 @@ function allinone_neutron_setup() {
         "<CONTROLLER_IP>:127.0.0.1" "<KEYSTONE_IP>:${KEYSTONE_IP}" \
         "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
         "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
-    setconf infile:$BASE_DIR/conf/etc.neutron/api-paste.ini \
-        outfile:/etc/neutron/api-paste.ini \
-        "<KEYSTONE_IP>:${KEYSTONE_IP}" \
-        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
-        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
     setconf infile:$BASE_DIR/conf/etc.neutron/l3_agent.ini \
         outfile:/etc/neutron/l3_agent.ini \
         "<KEYSTONE_IP>:${KEYSTONE_IP}" \
@@ -34,9 +29,15 @@ function allinone_neutron_setup() {
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
             "<DB_IP>:${DB_IP}" "<NEUTRON_IP>:${QUANUTM_IP}"
     elif [[ "${NETWORK_TYPE}" = 'vlan' ]]; then
-        setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.vlan \
-            outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
-            "<DB_IP>:${DB_IP}"
+        setconf infile:$BASE_DIR/conf/etc.neutron/neutron.conf \
+            outfile:/etc/neutron/neutron.conf \
+            "<DB_IP>:${DB_IP}" \
+            "<CONTROLLER_IP>:${CONTROLLER_IP}" \
+            "<KEYSTONE_IP>:${KEYSTONE_IP}" \
+            "<DB_NEUTRON_USER>:${DB_NEUTRON_USER}" \
+            "<DB_NEUTRON_PASS>:${DB_NEUTRON_PASS}"
+
+            
     else
         echo "NETWORK_TYPE must be 'vlan' or 'gre'."
         exit 1
