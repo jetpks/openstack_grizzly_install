@@ -208,12 +208,16 @@ function glance_setup() {
         outfile:/etc/glance/glance-api.conf \
         "<KEYSTONE_IP>:${KEYSTONE_IP}" "<DB_IP>:${DB_IP}" \
         "<DB_GLANCE_USER>:${DB_GLANCE_USER}" \
-        "<DB_GLANCE_PASS>:${DB_GLANCE_PASS}"
+        "<DB_GLANCE_PASS>:${DB_GLANCE_PASS}" \
+        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
+        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
     setconf infile:$BASE_DIR/conf/etc.glance/glance-registry.conf \
         outfile:/etc/glance/glance-registry.conf \
         "<KEYSTONE_IP>:${KEYSTONE_IP}" "<DB_IP>:${DB_IP}" \
         "<DB_GLANCE_USER>:${DB_GLANCE_USER}" \
-        "<DB_GLANCE_PASS>:${DB_GLANCE_PASS}"
+        "<DB_GLANCE_PASS>:${DB_GLANCE_PASS}" \
+        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
+        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
     
     # restart process and syncing database
     restart_service glance-registry
