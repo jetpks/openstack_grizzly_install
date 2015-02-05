@@ -1,30 +1,18 @@
-OpenStack Grizzly Installation Script
+OpenStack Icehouse Installation Script
 ====
 
-OpenStack Grizzly Installation Bash Script for Ubuntu Server 12.04 LTS.
+OpenStack Icehouse Installation Bash Script for Ubuntu Server 12.04 LTS.
 
 Author
 ----
 
 Tomokazu Hirai @jedipunkz
-
-Twitter : <https://twitter.com/jedipunkz>
-Blog    : <http://jedipunkz.github.io>
+Eric Jacobs @jetpks
 
 Notice
 ----
 
 This script was tested ..
-
-* all in one node with quantum
-* separated nodes (controller node, network node, compute x n) with quantum
-* all in one node with nova-network
-* separated nodes (controller node, compute x n) with nova-network
-* GRE Tunnel, VLAN
-
-so, now I do not support separated nodes for each service (keystone, glance,
-nova, etc...). If you want to do this with separated nodes mode, please tell
-me for fork it.
 
 Motivation
 ----
@@ -44,7 +32,7 @@ device name to $CINDER_VOLUME in setup.conf. If you do not have any additional
 disk for cinder, you can use loopback device. So please input loopback device
 name such as /dev/loop3.
 
-#### In All in ne node mode
+#### In All in One node mode
 
 You need 2 NICs (management network, public network). You can run this script
 via management network NIC. VM can access to the internet via public network
