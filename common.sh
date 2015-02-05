@@ -203,17 +203,6 @@ function glance_setup() {
         "<KEYSTONE_IP>:${KEYSTONE_IP}" "<DB_IP>:${DB_IP}" \
         "<DB_GLANCE_USER>:${DB_GLANCE_USER}" \
         "<DB_GLANCE_PASS>:${DB_GLANCE_PASS}"
-    setconf infile:$BASE_DIR/conf/etc.glance/glance-registry-paste.ini \
-        outfile:/etc/glance/glance-registry-paste.ini \
-        "<KEYSTONE_IP>:${KEYSTONE_IP}" \
-        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
-        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
-    setconf infile:$BASE_DIR/conf/etc.glance/glance-api-paste.ini \
-        outfile:/etc/glance/glance-api-paste.ini \
-        "<KEYSTONE_IP>:${KEYSTONE_IP}" \
-        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
-        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
-
     
     # restart process and syncing database
     restart_service glance-registry
@@ -258,16 +247,13 @@ function allinone_nova_setup() {
     mysql -u root -p${MYSQL_PASS} -e "GRANT ALL ON nova.* TO '${DB_NOVA_USER}'@'%' IDENTIFIED BY '${DB_NOVA_PASS}';"
 
     # set configuration files
-    setconf infile:$BASE_DIR/conf/etc.nova/api-paste.ini outfile:/etc/nova/api-paste.ini \
-        "<KEYSTONE_IP>:${KEYSTONE_IP}" \
-        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
-        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
     setconf infile:$BASE_DIR/conf/etc.nova/nova.conf outfile:/etc/nova/nova.conf \
-        "<METADATA_LISTEN>:${CONTROLLER_NODE_IP}" "<CONTROLLER_IP>:${CONTROLLER_NODE_IP}" \
+        "<CONTROLLER_IP>:${CONTROLLER_NODE_IP}" \
         "<VNC_IP>:${CONTROLLER_NODE_IP}" "<DB_IP>:${DB_IP}" "<DB_NOVA_USER>:${DB_NOVA_USER}" \
         "<DB_NOVA_PASS>:${DB_NOVA_PASS}" "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
         "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}" "<LOCAL_IP>:${CONTROLLER_NODE_IP}" \
-        "<CINDER_IP>:${CONTROLLER_NODE_IP}"
+        "<KEYSTONE_IP>:${KEYSTONE_IP}"
+        #"<CINDER_IP>:${CONTROLLER_NODE_IP}"
 
     cp $BASE_DIR/conf/etc.nova/nova-compute.conf /etc/nova/nova-compute.conf
 
@@ -431,7 +417,7 @@ function compute_nova_setup() {
     ovs-vsctl add-port br-eth1 ${DATANETWORK_NIC_COMPUTE_NODE}
 
     #
-    # Quantum
+    # Neutron
     #
     # install openvswitch neutron plugin
     install_package neutron-plugin-openvswitch-agent neutron-lbaas-agent
@@ -546,29 +532,15 @@ function cinder_setup() {
     mysql -uroot -p${MYSQL_PASS} -e "GRANT ALL ON cinder.* TO '${DB_CINDER_USER}'@'%' IDENTIFIED BY '${DB_CINDER_PASS}';"
     
     # set configuration files
-    if [[ "$1" = "controller" ]]; then
-        setconf infile:$BASE_DIR/conf/etc.cinder/api-paste.ini \
-            outfile:/etc/cinder/api-paste.ini \
-            "<KEYSTONE_IP>:${KEYSTONE_IP}" \
-            "<CONTROLLER_PUB_IP>:${CONTROLLER_NODE_PUB_IP}" \
-            "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
-            "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
-    elif [[ "$1" = "allinone" ]]; then
-        setconf infile:$BASE_DIR/conf/etc.cinder/api-paste.ini \
-            outfile:/etc/cinder/api-paste.ini \
-            "<KEYSTONE_IP>:${KEYSTONE_IP}" \
-            "<CONTROLLER_PUB_IP>:${CONTROLLER_NODE_IP}" \
-            "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
-            "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
-    else
-        echo "Warning: Mode must be 'allinone' or 'controller'."
-        exit 1
-    fi
     setconf infile:$BASE_DIR/conf/etc.cinder/cinder.conf \
         outfile:/etc/cinder/cinder.conf \
         "<DB_IP>:${DB_IP}" "<DB_CINDER_USER>:${DB_CINDER_USER}" \
         "<DB_CINDER_PASS>:${DB_CINDER_PASS}" \
-        "<CINDER_IP>:${CONTROLLER_NODE_IP}"
+        "<CINDER_IP>:${CONTROLLER_NODE_IP}" \
+        "<KEYSTONE_IP>:${KEYSTONE_IP}" \
+        "<CONTROLLER_IP>:${CONTROLLER_NODE_IP}" \
+        "<SERVICE_TENANT_NAME>:${SERVICE_TENANT_NAME}" \
+        "<SERVICE_PASSWORD>:${SERVICE_PASSWORD}"
 
     # input database for cinder
     cinder-manage db sync
@@ -587,9 +559,9 @@ function cinder_setup() {
     fi
 
     # disable tgt daemon
-    stop_service tgt
-    mv /etc/init/tgt.conf /etc/init/tgt.conf.disabled
-    restart_service iscsitarget
+    #stop_service tgt
+    #mv /etc/init/tgt.conf /etc/init/tgt.conf.disabled
+    #restart_service iscsitarget
 
     # restart all of cinder services
     restart_service cinder-volume
