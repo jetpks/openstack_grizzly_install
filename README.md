@@ -56,7 +56,7 @@ network segment or you can separate these networks. This README's
 configuration of the premise is sharing a segment with API and Public network
 (default NIC : eth0).
 
-How to use on All in One Node with quantum
+How to use on All in One Node with neutron
 ----
 
 #### Architecture
@@ -113,7 +113,7 @@ git clone this script from github.
 
     % git clone git://github.com/jedipunkz/openstack_grizzly_install.git
     % cd openstack_grizzly_install
-    % cp setup.conf.samples/setup.conf.allinone.quantum setup.conf
+    % cp setup.conf.samples/setup.conf.allinone.neutron setup.conf
     
 #### Edit parameters on setup.conf
 
@@ -123,7 +123,7 @@ which you need to edit is such things.
     HOST_IP='10.200.10.10'
     HOST_PUB_IP='10.200.9.10'
     PUBLICNETWORK_NIC_NETWORK_NODE='eth0'
-    NETWORK_COMPONENT='quantum'
+    NETWORK_COMPONENT='neutron'
 
 If you want to change other parameters such as DB password, admin password,
 please change these.
@@ -240,7 +240,7 @@ git clone this script from github on controller node.
 
     controller% git clone git://github.com/jedipunkz/openstack_grizzly_install.git
     controller% cd openstack_grizzly_install
-    controller% cp setup.conf.samples/setup.conf.separated.quantum setup.conf
+    controller% cp setup.conf.samples/setup.conf.separated.neutron setup.conf
     
 #### Edit parameters on setup.conf
 
@@ -254,7 +254,7 @@ which you need to edit is such things.
     DATANETWORK_NIC_NETWORK_NODE='eth1'
     DATANETWORK_NIC_COMPUTE_NODE='eth0'
     PUBLICNETWORK_NIC_NETWORK_NODE='eth0'
-    NETWORK_COMPONENT='quantum'
+    NETWORK_COMPONENT='neutron'
     
 If you want to change other parameters such as DB password, admin password,
 please change these.
@@ -400,7 +400,7 @@ Edit setup.conf (NETWORK_NODE_IP parameter) and execute setup.sh.
     NETWORK_NODE_IP='<your additional network node's ip>'
     add_network% sudo ./setup.sh network
     add_network% source ~/openstackrc
-    add_network% quantum agent-list # check agent list
+    add_network% neutron agent-list # check agent list
     
 How to use on separated nodes mode with nova-network
 ----
