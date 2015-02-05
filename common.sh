@@ -116,8 +116,8 @@ function keystone_setup() {
     USER_ID_GLANCE=$(keystone user-create --name glance --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
     USER_ID_CINDER=$(keystone user-create --name cinder --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
     USER_ID_DEMO=$(keystone user-create --name ${DEMO_USER} --pass ${DEMO_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email demo@example.com | grep ' id ' | get_field 2)
-    if [[ "$1" = "quantum" ]]; then
-        USER_ID_QUANTUM=$(keystone user-create --name quantum --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
+    if [[ "$1" = "neutron" ]]; then
+        USER_ID_QUANTUM=$(keystone user-create --name neutron --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
     fi
     
     # create roles
@@ -135,7 +135,7 @@ function keystone_setup() {
     keystone user-role-add --user-id ${USER_ID_NOVA} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
     keystone user-role-add --user-id ${USER_ID_GLANCE} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
     keystone user-role-add --user-id ${USER_ID_CINDER} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
-    if [[ "$1" = "quantum" ]]; then
+    if [[ "$1" = "neutron" ]]; then
         keystone user-role-add --user-id ${USER_ID_QUANTUM} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
     fi
     
@@ -149,8 +149,8 @@ function keystone_setup() {
     SERVICE_ID_VOLUME=$(keystone service-create --name cinder --type volume --description 'OpenStack Volume Service' | grep ' id ' | get_field 2)
     SERVICE_ID_IDENTITY=$(keystone service-create --name keystone --type identity --description 'OpenStack Identity Service' | grep ' id ' | get_field 2)
     SERVICE_ID_EC2=$(keystone service-create --name ec2 --type ec2 --description 'EC2 Service' | grep ' id ' | get_field 2)
-    if [[ "$1" = "quantum" ]]; then
-        SERVICE_ID_QUANTUM=$(keystone service-create --name quantum --type network --description 'OpenStack Networking Service' | grep ' id ' | get_field 2)
+    if [[ "$1" = "neutron" ]]; then
+        SERVICE_ID_QUANTUM=$(keystone service-create --name neutron --type network --description 'OpenStack Networking Service' | grep ' id ' | get_field 2)
     fi
 
     # check service list that we just made
@@ -163,7 +163,7 @@ function keystone_setup() {
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_VOLUME --publicurl "http://${CONTROLLER_NODE_PUB_IP}:8776/v1/\$(tenant_id)s" --adminurl "http://${CONTROLLER_NODE_IP}:8776/v1/\$(tenant_id)s" --internalurl "http://${CONTROLLER_NODE_IP}:8776/v1/\$(tenant_id)s"
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_IMAGE --publicurl "http://${CONTROLLER_NODE_PUB_IP}:9292/v2" --adminurl "http://${CONTROLLER_NODE_IP}:9292/v2" --internalurl "http://${CONTROLLER_NODE_IP}:9292/v2"
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_COMPUTE --publicurl "http://${CONTROLLER_NODE_PUB_IP}:8774/v2/\$(tenant_id)s" --adminurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s" --internalurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s"
-        if [[ "$1" = "quantum" ]]; then
+        if [[ "$1" = "neutron" ]]; then
             keystone endpoint-create --region myregion --service-id $SERVICE_ID_QUANTUM --publicurl "http://${CONTROLLER_NODE_PUB_IP}:9696/" --adminurl "http://${CONTROLLER_NODE_IP}:9696/" --internalurl "http://${CONTROLLER_NODE_IP}:9696/"
         fi
     else
@@ -172,7 +172,7 @@ function keystone_setup() {
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_VOLUME --publicurl "http://${CONTROLLER_NODE_IP}:8776/v1/\$(tenant_id)s" --adminurl "http://${CONTROLLER_NODE_IP}:8776/v1/\$(tenant_id)s" --internalurl "http://${CONTROLLER_NODE_IP}:8776/v1/\$(tenant_id)s"
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_IMAGE --publicurl "http://${CONTROLLER_NODE_IP}:9292/v2" --adminurl "http://${CONTROLLER_NODE_IP}:9292/v2" --internalurl "http://${CONTROLLER_NODE_IP}:9292/v2"
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_COMPUTE --publicurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s" --adminurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s" --internalurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s"
-        if [[ "$1" = "quantum" ]]; then
+        if [[ "$1" = "neutron" ]]; then
             keystone endpoint-create --region myregion --service-id $SERVICE_ID_QUANTUM --publicurl "http://${CONTROLLER_NODE_IP}:9696/" --adminurl "http://${CONTROLLER_NODE_IP}:9696/" --internalurl "http://${CONTROLLER_NODE_IP}:9696/"
         fi
     fi
@@ -240,7 +240,7 @@ function os_add () {
 }
 
 # --------------------------------------------------------------------------------------
-# install nova for all in one with quantum
+# install nova for all in one with neutron
 # --------------------------------------------------------------------------------------
 function allinone_nova_setup() {
     # install kvm and the others packages
@@ -282,7 +282,7 @@ function allinone_nova_setup() {
 }
 
 # --------------------------------------------------------------------------------------
-# install nova for all in one with quantum
+# install nova for all in one with neutron
 # --------------------------------------------------------------------------------------
 function allinone_nova_setup_nova_network() {
     # install kvm and the others packages
@@ -403,7 +403,7 @@ function create_network_nova_network() {
 }
 
 # --------------------------------------------------------------------------------------
-# install nova for compute node with quantum
+# install nova for compute node with neutron
 # --------------------------------------------------------------------------------------
 function compute_nova_setup() {
     # install dependency packages
@@ -433,29 +433,29 @@ function compute_nova_setup() {
     #
     # Quantum
     #
-    # install openvswitch quantum plugin
-    install_package quantum-plugin-openvswitch-agent quantum-lbaas-agent
+    # install openvswitch neutron plugin
+    install_package neutron-plugin-openvswitch-agent neutron-lbaas-agent
 
     # set configuration files
     if [[ "${NETWORK_TYPE}" = 'gre' ]]; then
-        setconf infile:$BASE_DIR/conf/etc.quantum.plugins.openvswitch/ovs_quantum_plugin.ini.gre \
-            outfile:/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini \
+        setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.gre \
+            outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
             "<DB_IP>:${DB_IP}" "<QUANTUM_IP>:${COMPUTE_NODE_IP}"
     elif [[ "${NETWORK_TYPE}" = 'vlan' ]]; then
-        setconf infile:$BASE_DIR/conf/etc.quantum.plugins.openvswitch/ovs_quantum_plugin.ini.vlan \
-            outfile:/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini \
+        setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.vlan \
+            outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
             "<DB_IP>:${DB_IP}"
     else
         echo "NETWORK_TYPE must be 'vlan' or 'gre'."
         exit 1
     fi
         
-    setconf infile:$BASE_DIR/conf/etc.quantum/quantum.conf \
-        outfile:/etc/quantum/quantum.conf \
+    setconf infile:$BASE_DIR/conf/etc.neutron/neutron.conf \
+        outfile:/etc/neutron/neutron.conf \
         "<CONTROLLER_IP>:${CONTROLLER_NODE_IP}"
 
     # restart ovs agent
-    service quantum-plugin-openvswitch-agent restart
+    service neutron-plugin-openvswitch-agent restart
 
     #
     # Nova
