@@ -77,6 +77,17 @@ function mysql_setup() {
 
     # enable to access from the other nodes to local mysqld via network
     sed -i -e  "s/^\(bind-address\s*=\).*/\1 0.0.0.0/" /etc/mysql/my.cnf
+    # utf8, bby
+    if [ ! -e '/etc/mysql/conf.d/utf8.cnf' ]; then
+      cat > '/etc/mysql/conf.d/utf8.cnf' <<HEREDOC
+[mysqld]
+default-storage-engine  = innodb
+collation-server        = utf8_general_ci
+init-connect            = 'SET NAMES utf8'
+character-set-server    = utf8
+HEREDOC
+    fi
+
     restart_service mysql
 
     # misc software
