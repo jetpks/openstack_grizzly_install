@@ -57,7 +57,7 @@ case "$1" in
         DB_IP=${HOST_IP};                       check_para ${DB_IP}
         KEYSTONE_IP=${HOST_IP};                 check_para ${KEYSTONE_IP}
         GLANCE_IP=${HOST_IP};                   check_para ${GLANCE_IP}
-        QUANTUM_IP=${HOST_IP};                  check_para ${QUANTUM_IP}
+        NEUTRON_IP=${HOST_IP};                  check_para ${NEUTRON_IP}
         RABBIT_IP=${HOST_IP};                   check_para ${RABBIT_IP}
         CONTROLLER_NODE_PUB_IP=${HOST_PUB_IP};  check_para ${CONTROLLER_NODE_PUB_IP}
         CONTROLLER_NODE_IP=${HOST_IP};          check_para ${CONTROLLER_NODE_IP}
@@ -101,7 +101,7 @@ case "$1" in
         DB_IP=${CONTROLLER_NODE_IP};                check_para ${DB_IP}
         KEYSTONE_IP=${CONTROLLER_NODE_IP};          check_para ${KEYSTONE_IP}
         GLANCE_IP=${CONTROLLER_NODE_IP};            check_para ${GLANCE_IP}
-        QUANTUM_IP=${CONTROLLER_NODE_IP};           check_para ${QUANTUM_IP}
+        NEUTRON_IP=${CONTROLLER_NODE_IP};           check_para ${NEUTRON_IP}
         RABBIT_IP=${CONTROLLER_NODE_IP};            check_para ${RABBIT_IP}
         if [[ "$NETWORK_COMPONENT" = "neutron" ]]; then
             shell_env separate
@@ -143,7 +143,7 @@ case "$1" in
         DB_IP=${CONTROLLER_NODE_IP};       check_para ${DB_IP}
         KEYSTONE_IP=${CONTROLLER_NODE_IP}; check_para ${KEYSTONE_IP}
         GLANCE_IP=${CONTROLLER_NODE_IP};   check_para ${GLANCE_IP}
-        QUANTUM_IP=${CONTROLLER_NODE_IP};  check_para ${QUANTUM_IP}
+        NEUTRON_IP=${CONTROLLER_NODE_IP};  check_para ${NEUTRON_IP}
         RABBIT_IP=${CONTROLLER_NODE_IP};   check_para ${RABBIT_IP}
         shell_env separate
         init
@@ -160,7 +160,7 @@ case "$1" in
         DB_IP=${CONTROLLER_NODE_IP};       check_para ${DB_IP}
         KEYSTONE_IP=${CONTROLLER_NODE_IP}; check_para ${KEYSTONE_IP}
         GLANCE_IP=${CONTROLLER_NODE_IP};   check_para ${GLANCE_IP}
-        QUANTUM_IP=${CONTROLLER_NODE_IP};  check_para ${QUANTUM_IP}
+        NEUTRON_IP=${CONTROLLER_NODE_IP};  check_para ${NEUTRON_IP}
         RABBIT_IP=${CONTROLLER_NODE_IP};   check_para ${RABBIT_IP}
         if [[ "$NETWORK_COMPONENT" = "neutron" ]]; then
             shell_env separate

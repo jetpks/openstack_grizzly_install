@@ -117,7 +117,7 @@ function keystone_setup() {
     USER_ID_CINDER=$(keystone user-create --name cinder --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
     USER_ID_DEMO=$(keystone user-create --name ${DEMO_USER} --pass ${DEMO_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email demo@example.com | grep ' id ' | get_field 2)
     if [[ "$1" = "neutron" ]]; then
-        USER_ID_QUANTUM=$(keystone user-create --name neutron --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
+        USER_ID_NEUTRON=$(keystone user-create --name neutron --pass ${SERVICE_PASSWORD} --tenant-id ${TENANT_ID_SERVICE} --email admin@example.com | grep ' id ' | get_field 2)
     fi
     
     # create roles
@@ -136,7 +136,7 @@ function keystone_setup() {
     keystone user-role-add --user-id ${USER_ID_GLANCE} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
     keystone user-role-add --user-id ${USER_ID_CINDER} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
     if [[ "$1" = "neutron" ]]; then
-        keystone user-role-add --user-id ${USER_ID_QUANTUM} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
+        keystone user-role-add --user-id ${USER_ID_NEUTRON} --role-id ${ROLE_ID_ADMIN} --tenant-id ${TENANT_ID_SERVICE}
     fi
     
     # The 'Member' role is used by Horizon and Swift. So add the 'Member' role accordingly.
@@ -150,7 +150,7 @@ function keystone_setup() {
     SERVICE_ID_IDENTITY=$(keystone service-create --name keystone --type identity --description 'OpenStack Identity Service' | grep ' id ' | get_field 2)
     SERVICE_ID_EC2=$(keystone service-create --name ec2 --type ec2 --description 'EC2 Service' | grep ' id ' | get_field 2)
     if [[ "$1" = "neutron" ]]; then
-        SERVICE_ID_QUANTUM=$(keystone service-create --name neutron --type network --description 'OpenStack Networking Service' | grep ' id ' | get_field 2)
+        SERVICE_ID_NEUTRON=$(keystone service-create --name neutron --type network --description 'OpenStack Networking Service' | grep ' id ' | get_field 2)
     fi
 
     # check service list that we just made
@@ -164,7 +164,7 @@ function keystone_setup() {
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_IMAGE --publicurl "http://${CONTROLLER_NODE_PUB_IP}:9292/v2" --adminurl "http://${CONTROLLER_NODE_IP}:9292/v2" --internalurl "http://${CONTROLLER_NODE_IP}:9292/v2"
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_COMPUTE --publicurl "http://${CONTROLLER_NODE_PUB_IP}:8774/v2/\$(tenant_id)s" --adminurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s" --internalurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s"
         if [[ "$1" = "neutron" ]]; then
-            keystone endpoint-create --region myregion --service-id $SERVICE_ID_QUANTUM --publicurl "http://${CONTROLLER_NODE_PUB_IP}:9696/" --adminurl "http://${CONTROLLER_NODE_IP}:9696/" --internalurl "http://${CONTROLLER_NODE_IP}:9696/"
+            keystone endpoint-create --region myregion --service-id $SERVICE_ID_NEUTRON --publicurl "http://${CONTROLLER_NODE_PUB_IP}:9696/" --adminurl "http://${CONTROLLER_NODE_IP}:9696/" --internalurl "http://${CONTROLLER_NODE_IP}:9696/"
         fi
     else
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_EC2 --publicurl "http://${CONTROLLER_NODE_IP}:8773/services/Cloud" --adminurl "http://${CONTROLLER_NODE_IP}:8773/services/Admin" --internalurl "http://${CONTROLLER_NODE_IP}:8773/services/Cloud"
@@ -173,7 +173,7 @@ function keystone_setup() {
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_IMAGE --publicurl "http://${CONTROLLER_NODE_IP}:9292/v2" --adminurl "http://${CONTROLLER_NODE_IP}:9292/v2" --internalurl "http://${CONTROLLER_NODE_IP}:9292/v2"
         keystone endpoint-create --region myregion --service_id $SERVICE_ID_COMPUTE --publicurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s" --adminurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s" --internalurl "http://${CONTROLLER_NODE_IP}:8774/v2/\$(tenant_id)s"
         if [[ "$1" = "neutron" ]]; then
-            keystone endpoint-create --region myregion --service-id $SERVICE_ID_QUANTUM --publicurl "http://${CONTROLLER_NODE_IP}:9696/" --adminurl "http://${CONTROLLER_NODE_IP}:9696/" --internalurl "http://${CONTROLLER_NODE_IP}:9696/"
+            keystone endpoint-create --region myregion --service-id $SERVICE_ID_NEUTRON --publicurl "http://${CONTROLLER_NODE_IP}:9696/" --adminurl "http://${CONTROLLER_NODE_IP}:9696/" --internalurl "http://${CONTROLLER_NODE_IP}:9696/"
         fi
     fi
 
@@ -440,7 +440,7 @@ function compute_nova_setup() {
     if [[ "${NETWORK_TYPE}" = 'gre' ]]; then
         setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.gre \
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
-            "<DB_IP>:${DB_IP}" "<QUANTUM_IP>:${COMPUTE_NODE_IP}"
+            "<DB_IP>:${DB_IP}" "<NEUTRON_IP>:${COMPUTE_NODE_IP}"
     elif [[ "${NETWORK_TYPE}" = 'vlan' ]]; then
         setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.vlan \
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
