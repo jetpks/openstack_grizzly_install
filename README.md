@@ -9,10 +9,21 @@ Author
 Tomokazu Hirai @jedipunkz
 Eric Jacobs @jetpks
 
-Notice
+Status
 ----
 
-This script was tested ..
+**NON-FUNCTIONAL**
+
+This is a non-functional automated icehouse all-in-one installer.
+
+TODO
+----
+- Fix neutron configs (several of them are still grizzly configs)
+- Fix nova.conf.nova-network (still completely grizzly)
+- Add kvm/qemu selection for the compute node
+- Add vlan/vxlan/gre/flag network selection in neutron
+- Verify sysctl additions
+- Verify kernel ovs support pre-install
 
 Motivation
 ----
