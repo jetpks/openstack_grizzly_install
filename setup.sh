@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
-# OpenStack Grizzly Installation Bash Script
-#     allright reserved by Tomokazu Hirai @jedipunkz
+# OpenStack Icehouse Installation Bash Script
 #
 # --------------------------------------------------------------------------------------
 # Usage : sudo ./deploy.sh <node_type>
@@ -16,12 +15,12 @@ set -ex
 source ./functions.sh
 source ./common.sh
 #source ./nova-network.sh
-source ./quantum.sh
+source ./neutron.sh
 
 # --------------------------------------------------------------------------------------
 # include paramters of conf file.
 # --------------------------------------------------------------------------------------
-# quantum.conf has some parameters which you can set. If you want to know about each
+# neutron.conf has some parameters which you can set. If you want to know about each
 # meaning of parameters, please see README_parameters.md.
 source ./setup.conf
     
@@ -62,15 +61,15 @@ case "$1" in
         RABBIT_IP=${HOST_IP};                   check_para ${RABBIT_IP}
         CONTROLLER_NODE_PUB_IP=${HOST_PUB_IP};  check_para ${CONTROLLER_NODE_PUB_IP}
         CONTROLLER_NODE_IP=${HOST_IP};          check_para ${CONTROLLER_NODE_IP}
-        if [[ "$NETWORK_COMPONENT" = "quantum" ]]; then
+        if [[ "$NETWORK_COMPONENT" = "neutron" ]]; then
             shell_env allinone
             init
             mysql_setup
-            keystone_setup quantum
+            keystone_setup neutron
             glance_setup
             os_add
             openvswitch_setup allinone
-            allinone_quantum_setup
+            allinone_neutron_setup
             allinone_nova_setup
             cinder_setup allinone
             horizon_setup
@@ -89,7 +88,7 @@ case "$1" in
             create_network_nova_network
             scgroup_allow allinone
         else
-            echo "NETWORK_COMPONENT must be 'quantum' or 'nova-network'."
+            echo "NETWORK_COMPONENT must be 'neutron' or 'nova-network'."
             exit 1
         fi
 
@@ -104,14 +103,14 @@ case "$1" in
         GLANCE_IP=${CONTROLLER_NODE_IP};            check_para ${GLANCE_IP}
         QUANTUM_IP=${CONTROLLER_NODE_IP};           check_para ${QUANTUM_IP}
         RABBIT_IP=${CONTROLLER_NODE_IP};            check_para ${RABBIT_IP}
-        if [[ "$NETWORK_COMPONENT" = "quantum" ]]; then
+        if [[ "$NETWORK_COMPONENT" = "neutron" ]]; then
             shell_env separate
             init
             mysql_setup
-            keystone_setup quantum controller
+            keystone_setup neutron controller
             glance_setup
             os_add
-            controller_quantum_setup
+            controller_neutron_setup
             controller_nova_setup
             cinder_setup controller
             horizon_setup
@@ -123,14 +122,14 @@ case "$1" in
             keystone_setup nova-network controller
             glance_setup
             os_add
-            #controller_quantum_setup
+            #controller_neutron_setup
             controller_nova_setup_nova_network
             cinder_setup controller
             horizon_setup
             create_network_nova_network
             scgroup_allow controller
         else
-            echo "NETWORK_COMPONENT must be 'quantum' or 'nova-network'."
+            echo "NETWORK_COMPONENT must be 'neutron' or 'nova-network'."
             exit 1
         fi
         
@@ -149,7 +148,7 @@ case "$1" in
         shell_env separate
         init
         openvswitch_setup network
-        network_quantum_setup
+        network_neutron_setup
         create_network
 
         printf '\033[0;32m%s\033[0m\n' 'Setup for network node has done. :D'
@@ -163,16 +162,16 @@ case "$1" in
         GLANCE_IP=${CONTROLLER_NODE_IP};   check_para ${GLANCE_IP}
         QUANTUM_IP=${CONTROLLER_NODE_IP};  check_para ${QUANTUM_IP}
         RABBIT_IP=${CONTROLLER_NODE_IP};   check_para ${RABBIT_IP}
-        if [[ "$NETWORK_COMPONENT" = "quantum" ]]; then
+        if [[ "$NETWORK_COMPONENT" = "neutron" ]]; then
             shell_env separate
             init
             compute_nova_setup
-        elif [[ "$NETWORK_COMPONENT" = "nova-network" ]]; then
+        elif [[ "$NETWORK_COMPONENT" = "neutron" ]]; then
             shell_env separate
             init
             compute_nova_setup_nova_network
         else
-            echo "NETWORK_COMPONENT must be 'quantum' or 'nova-network'."
+            echo "NETWORK_COMPONENT must be 'neutron' or 'nova-network'."
             exit 1
         fi
         
