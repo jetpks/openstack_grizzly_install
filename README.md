@@ -20,6 +20,7 @@ TODO
 ----
 - Fix neutron configs (several of them are still grizzly configs)
 - Fix nova.conf.nova-network (still completely grizzly)
+- Refactor allinone_nova_setup_nova_network() # left as grizzly
 - Add kvm/qemu selection for the compute node
 - Add vlan/vxlan/gre/flag network selection in neutron
 - Verify sysctl additions
