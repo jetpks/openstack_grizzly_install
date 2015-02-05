@@ -9,7 +9,7 @@ function allinone_neutron_setup() {
 
     # create database for neutron
     mysql -u root -p${MYSQL_PASS} -e "CREATE DATABASE neutron;"
-    mysql -u root -p${MYSQL_PASS} -e "GRANT ALL ON neutron.* TO '${DB_QUANTUM_USER}'@'%' IDENTIFIED BY '${DB_QUANTUM_PASS}';"
+    mysql -u root -p${MYSQL_PASS} -e "GRANT ALL ON neutron.* TO '${DB_NEUTRON_USER}'@'%' IDENTIFIED BY '${DB_NEUTRON_PASS}';"
 
     # set configuration files
     setconf infile:$BASE_DIR/conf/etc.neutron/metadata_agent.ini \
@@ -32,7 +32,7 @@ function allinone_neutron_setup() {
     if [[ "${NETWORK_TYPE}" = 'gre' ]]; then
         setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.gre \
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
-            "<DB_IP>:${DB_IP}" "<QUANTUM_IP>:${QUANUTM_IP}"
+            "<DB_IP>:${DB_IP}" "<NEUTRON_IP>:${QUANUTM_IP}"
     elif [[ "${NETWORK_TYPE}" = 'vlan' ]]; then
         setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.vlan \
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
@@ -63,7 +63,7 @@ function controller_neutron_setup() {
     install_package neutron-server neutron-plugin-openvswitch
     # create database for neutron
     mysql -u root -p${MYSQL_PASS} -e "CREATE DATABASE neutron;"
-    mysql -u root -p${MYSQL_PASS} -e "GRANT ALL ON neutron.* TO '${DB_QUANTUM_USER}'@'%' IDENTIFIED BY '${DB_QUANTUM_PASS}';"
+    mysql -u root -p${MYSQL_PASS} -e "GRANT ALL ON neutron.* TO '${DB_NEUTRON_USER}'@'%' IDENTIFIED BY '${DB_NEUTRON_PASS}';"
 
     # set configuration files
     if [[ "${NETWORK_TYPE}" = 'gre' ]]; then
@@ -125,7 +125,7 @@ function network_neutron_setup() {
     if [[ "${NETWORK_TYPE}" = 'gre' ]]; then
         setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.gre \
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \
-            "<DB_IP>:${DB_IP}" "<QUANTUM_IP>:${NETWORK_NODE_IP}"
+            "<DB_IP>:${DB_IP}" "<NEUTRON_IP>:${NETWORK_NODE_IP}"
     elif [[ "${NETWORK_TYPE}" = 'vlan' ]]; then
         setconf infile:$BASE_DIR/conf/etc.neutron.plugins.openvswitch/ovs_neutron_plugin.ini.vlan \
             outfile:/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini \

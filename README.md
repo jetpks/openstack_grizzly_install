@@ -552,8 +552,8 @@ These are Meaning of parameters.
 * DB_KEYSTONE_PASS : MySQL password for Keystone
 * DB_GLANCE_USER : MySQL user for Glance
 * DB_GLANCEPASS : MySQL password for Glance
-* DB_QUANTUM_USER : MySQL user for Quantum
-* DB_QUANTUM_PASS : MySQL password for Quantum
+* DB_NEUTRON_USER : MySQL user for Quantum
+* DB_NEUTRON_PASS : MySQL password for Quantum
 * DB_NOVA_USER : MySQL user for Nova
 * DB_NOVA_PASS : MySQL password for Nova
 * DB_CINDER_USER : MySQL user for Cinder
