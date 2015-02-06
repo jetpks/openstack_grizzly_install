@@ -6,16 +6,14 @@ OpenStack Icehouse Installation Bash Script for Ubuntu Server 12.04 LTS.
 Author
 ----
 
-Tomokazu Hirai @jedipunkz
-Eric Jacobs @jetpks
+- Tomokazu Hirai @jedipunkz (Original Grizzly Author)
+- Eric Jacobs @jetpks (Icehouse port)
 
 Status
 ----
 
-**NON-FUNCTIONAL**
-**ALPHA**
-
-This is a non-functional automated icehouse all-in-one installer.
+**BETA** - the allinone install works. Still some configuration kinks to work
+out.
 
 TODO
 ----
@@ -25,7 +23,7 @@ TODO
 - Fix `allinone_neutron_setup()` for GRE (vlan works right now)
 - Refactor `allinone_nova_setup_nova_network()` # left as grizzly
 - Add kvm/qemu selection for the compute node
-- Add vlan/vxlan/gre/flag network selection in neutron
+- Add vlan/vxlan/gre/flat network selection in neutron
 - Verify sysctl additions
 - Verify kernel ovs support pre-install
 
