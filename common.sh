@@ -616,8 +616,8 @@ function scgroup_allow() {
     export SERVICE_ENDPOINT="http://${KEYSTONE_IP}:35357/v2.0"
 
     # add SSH, ICMP allow rules which named 'default'
-    nova --no-cache secgroup-add-rule default tcp 22 22 0.0.0.0/0
-    nova --no-cache secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+    nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+    nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 
     # switch to 'admin' user
     # this script need 'admin' user, so turn back to admin.
