@@ -247,8 +247,8 @@ function os_add () {
 # install nova for all in one with neutron
 # --------------------------------------------------------------------------------------
 function allinone_nova_setup() {
-    # install kvm and the others packages
-    install_package kvm libvirt-bin pm-utils
+    # install qemu-kvm and the others packages
+    install_package qemu-kvm libvirt-bin pm-utils
     restart_service dbus
     sleep 3
     #virsh net-destroy default
@@ -286,8 +286,8 @@ function allinone_nova_setup() {
 # install nova for all in one with neutron
 # --------------------------------------------------------------------------------------
 function allinone_nova_setup_nova_network() {
-    # install kvm and the others packages
-    install_package kvm libvirt-bin pm-utils
+    # install qemu-kvm and the others packages
+    install_package qemu-kvm libvirt-bin pm-utils
     restart_service dbus
     sleep 3
     #virsh net-destroy default
@@ -408,7 +408,7 @@ function create_network_nova_network() {
 # --------------------------------------------------------------------------------------
 function compute_nova_setup() {
     # install dependency packages
-    install_package vlan bridge-utils kvm libvirt-bin pm-utils sysfsutils
+    install_package vlan bridge-utils qemu-kvm libvirt-bin pm-utils sysfsutils
     restart_service dbus
     sleep 3
     #virsh net-destroy default
@@ -491,7 +491,7 @@ function compute_nova_setup() {
 # --------------------------------------------------------------------------------------
 function compute_nova_setup_nova_network() {
     # install dependency packages
-    install_package vlan bridge-utils kvm libvirt-bin pm-utils sysfsutils
+    install_package vlan bridge-utils qemu-kvm libvirt-bin pm-utils sysfsutils
     restart_service dbus
     sleep 3
     #virsh net-destroy default
